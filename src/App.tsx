@@ -14,8 +14,8 @@ function App() {
     expectedReturn: "",
     duration: "",
   });
-  console.log(inputValues);
 
+  const initialDurationCheck = inputValues.duration >= "1";
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
@@ -32,7 +32,12 @@ function App() {
         inputValues={inputValues}
         inputChangeHandler={inputChangeHandler}
       />
-      <Table annualData={annualData} />
+      {!initialDurationCheck && (
+        <p className="center">
+          Please enter a valid duration (at least 1 year) to see the investment
+        </p>
+      )}
+      {initialDurationCheck && <Table annualData={annualData} />}
     </>
   );
 }

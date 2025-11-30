@@ -11,6 +11,10 @@ interface TableProps {
 }
 export const Table = (props: TableProps) => {
   const { annualData } = props;
+  const initialInvestement =
+    annualData[0].valueEndOfYear -
+    annualData[0].interest -
+    annualData[0].annualInvestment;
   return (
     <table id="result">
       <thead>
@@ -23,19 +27,23 @@ export const Table = (props: TableProps) => {
         </tr>
       </thead>
       <tbody>
-        {annualData.map((data) => (
-          <tr key={data.year}>
-            <td>{data.year}</td>
-            <td>{formatter.format(data.valueEndOfYear)}</td>
-            <td>{formatter.format(data.interest)}</td>
-            <td>{formatter.format(data.annualInvestment * data.year)}</td>
-            <td>
-              {formatter.format(
-                data.valueEndOfYear - data.annualInvestment * data.year
-              )}
-            </td>
-          </tr>
-        ))}
+        {annualData.map((data) => {
+          const totalInterest =
+            data.valueEndOfYear -
+            data.annualInvestment * data.year -
+            initialInvestement;
+          const investedAmount = data.valueEndOfYear - totalInterest;
+
+          return (
+            <tr key={data.year}>
+              <td>{data.year}</td>
+              <td>{formatter.format(data.valueEndOfYear)}</td>
+              <td>{formatter.format(data.interest)}</td>
+              <td>{formatter.format(totalInterest)}</td>
+              <td>{formatter.format(investedAmount)}</td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
